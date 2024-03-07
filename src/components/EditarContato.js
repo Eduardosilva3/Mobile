@@ -3,6 +3,7 @@ import { Icon, } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import Notification from './Notification';
+import ApiContato from '../Api/ApiContato';
 
 
 
@@ -12,24 +13,64 @@ import Notification from './Notification';
 const EditarContato = (props) => {
 
     
-
+    let contato = props.route.params
     let nome = props.route.params.name;
     let phoneU = props.route.params.phone;
 
     const [showNotification, setShowNotification] = useState(false);
     const [name, setName] = useState(nome);
     const [phone, setPhone] = useState(phoneU);
+    const [mensagem, setMensagem] = useState("")
 
     const alterar = () => {
         
-        setShowNotification(true);
 
-       
+        contatoAlerado =  {
+            "id": contato.id,
+            "name": name,
+            "avatar_url": "https://cdn-icons-png.flaticon.com/128/711/711769.png",
+            "phone": phone
+        }
 
+        ApiContato.putContato(contatoAlerado)
+            .then(response  => {
+                if(response.status === 200){
+                    setMensagem(`Contato alterado com sucesso ${name} ${phone}`)
+                    setShowNotification(true);
+                }
+            }).catch(error => {
+                console.warn(error)
+            })
+
+
+    
         setTimeout(() => {
             setShowNotification(false);
         }, 3000);
     }
+
+    const deletar = () => {
+        ApiContato.deleteContato(contato.id)
+        .then(response =>{
+            if(response.status === 200){
+                setMensagem(`Contato ${name} foi deletado da agenda!!`)
+                setShowNotification(true);
+
+                setTimeout(() => {
+                    setShowNotification(false);
+                    listaContato();
+                }, 3000);
+
+            }
+        }).catch(error =>{
+            console.warn(error)
+        })
+
+
+        
+    }
+
+   
 
     const navigation = useNavigation();
     
@@ -81,12 +122,12 @@ const EditarContato = (props) => {
                     <TouchableOpacity style={styles.button} onPress={alterar}>
                         <Text style={styles.buttonText}  >Salvar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonDelete}>
+                    <TouchableOpacity style={styles.buttonDelete} onPress={deletar}>
                         <Text style={styles.buttonText}>Exluir</Text>
                     </TouchableOpacity>
                     
                 </View>
-                {showNotification && <Notification message={`Contato alterado com sucesso ${name} ${phone}`} />}
+                {showNotification && <Notification message={mensagem} />}
             </View>
            
         </View>

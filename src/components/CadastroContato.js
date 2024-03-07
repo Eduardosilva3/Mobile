@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Icon, } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import ApiContato from '../Api/ApiContato';
+
 
 
 
@@ -10,7 +13,25 @@ import { useNavigation } from '@react-navigation/native';
 const CadastroContato = () => {
 
 
+    const [nome, setNome] = useState("")
+    const [email, setEmail] = useState()
+    const [telefone, setTelefone] = useState("")
 
+
+    const salvarContato = () => {
+        contato = {
+            "name": nome,
+            "avatar_url": "https://cdn-icons-png.flaticon.com/128/711/711769.png",
+            "phone": telefone
+        };
+
+        ApiContato.postContato(contato)
+        .then(response => {
+            console.info(response.status)
+        }).catch(error => {
+            console.warn(error)
+        })
+    }
 
     const navigation = useNavigation();
 
@@ -39,7 +60,8 @@ const CadastroContato = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Nome"
-
+                        value={nome}
+                        onChangeText={setNome}
 
                     />
                     <Text style={styles.title}>Email</Text>
@@ -53,10 +75,15 @@ const CadastroContato = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Telefone"
+                        value={telefone}
+                        onChangeText={setTelefone}
 
 
                     />
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => salvarContato()}
+                    >
                         <Text style={styles.buttonText}>Salvar</Text>
                     </TouchableOpacity>
                     

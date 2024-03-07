@@ -1,6 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native';
 import { ListItem, Avatar, Icon, } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import ApiContato from '../Api/ApiContato';
+
 
 
 
@@ -8,9 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const Contato = () => {
-
+    
     const navigation = useNavigation();
-
+    const [list, setList] = useState([])
 
     const novoContato = () => {
         navigation.navigate('CadastroContato');
@@ -22,24 +25,21 @@ const Contato = () => {
 
     }
 
-    const list = [
-        {
-            name: 'Eduardo Silva',
-            avatar_url: 'https://cdn-icons-png.flaticon.com/128/711/711769.png',
-            phone: '81-99999999'
-        },
-        {
-            name: 'Marcus Vinicius',
-            avatar_url: 'https://cdn-icons-png.flaticon.com/128/711/711769.png',
-            phone: '81-88888888'
-        },
-        {
-            name: 'Carlos Gabriel',
-            avatar_url: 'https://cdn-icons-png.flaticon.com/128/711/711769.png',
-            phone: '81-88888888'
-        },
 
-    ]
+    useEffect(()=>{
+
+        console.log("use Effect Chamado")
+        ApiContato.getContato()
+        .then(response => {
+            console.log(response.status);
+            setList(response.data)
+        }).catch(error =>{
+            console.warn(error);
+        })
+
+       
+    },[])
+
 
 
     return (
