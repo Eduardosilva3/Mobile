@@ -10,9 +10,9 @@ import ApiContato from '../Api/ApiContato';
 
 
 
-const CadastroContato = () => {
+const CadastroContato = ({navigation, route}) => {
 
-
+    const { fetchData } = route.params;
     const [nome, setNome] = useState("")
     const [email, setEmail] = useState()
     const [telefone, setTelefone] = useState("")
@@ -28,16 +28,19 @@ const CadastroContato = () => {
         ApiContato.postContato(contato)
         .then(response => {
             console.info(response.status)
+            fetchData();
+            navigation.goBack()
         }).catch(error => {
             console.warn(error)
         })
     }
 
-    const navigation = useNavigation();
+   // const navigation = useNavigation();
 
 
     const listaContato = () => {
-        navigation.navigate('Contato');
+       // navigation.navigate('Contato');
+       navigation.goBack();
     }
 
 

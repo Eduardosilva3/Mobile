@@ -10,6 +10,7 @@ import EditarContato from './src/components/EditarContato';
 import Cadastro from './src/components/Cadastrar';
 
 
+
 const AppStack = createStackNavigator();
 
 export default function App() {

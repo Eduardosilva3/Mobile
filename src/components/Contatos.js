@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native';
 import { ListItem, Avatar, Icon, } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import ApiContato from '../Api/ApiContato';
 
 
@@ -16,7 +16,7 @@ const Contato = () => {
     const [list, setList] = useState([])
 
     const novoContato = () => {
-        navigation.navigate('CadastroContato');
+        navigation.navigate('CadastroContato', {fetchData});
     }
 
     const editarContato = (contato) => {
@@ -26,20 +26,22 @@ const Contato = () => {
     }
 
 
-    useEffect(()=>{
-
-        console.log("use Effect Chamado")
+    const fetchData = () => {
         ApiContato.getContato()
-        .then(response => {
-            console.log(response.status);
-            setList(response.data)
-        }).catch(error =>{
-            console.warn(error);
-        })
+            .then(response => {
+                console.log(response.status);
+                setList(response.data);
+            })
+            .catch(error => {
+                console.warn(error);
+            });
+    };
 
-       
-    },[])
 
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
 
     return (
