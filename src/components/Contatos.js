@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import React,{ useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native';
 import { ListItem, Avatar, Icon, } from 'react-native-elements';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import ApiContato from '../Api/ApiContato';
+import app from "../../firebase";
+import { getAuth } from "firebase/auth";
+import NotificationLogin from "./NotificationLogin";
 
 
 
@@ -11,9 +14,10 @@ import ApiContato from '../Api/ApiContato';
 
 
 const Contato = () => {
-    
     const navigation = useNavigation();
-    const [list, setList] = useState([])
+    const [list, setList] = useState([]);
+    const [notification, setNotification] = React.useState(null);
+
 
     const novoContato = () => {
         navigation.navigate('CadastroContato', {fetchData});
@@ -38,6 +42,20 @@ const Contato = () => {
     };
 
 
+    const handleLogout = () => {
+
+        const auth = getAuth(app);
+
+        auth.signOut()
+          .then(() => {
+            setNotification({ message: 'Logout realizado com sucesso!', color: 'green' });
+            setTimeout(() => navigation.navigate("Login"), 3000); 
+
+          })
+          .catch(error => {
+            console.error('Erro ao fazer logout:', error);
+          });
+      }
 
     useEffect(() => {
         fetchData();
@@ -48,12 +66,18 @@ const Contato = () => {
 
         <View>
             <View style={styles.cabecalho}>
+                <TouchableOpacity style={styles.icon}>
+                    <Icon name="logout" type='material' size={30} color={'white'}
+                        onPress={handleLogout}
+                    />
+                </TouchableOpacity>
                 <Text style={styles.text}>Lista de Contatos</Text>
                 <TouchableOpacity style={styles.icon}>
                     <Icon name="plus" type='font-awesome' size={30} color={'white'}
                         onPress={novoContato}
                     />
                 </TouchableOpacity>
+                
             </View>
             <View>
                 {
@@ -64,12 +88,14 @@ const Contato = () => {
                                 <ListItem.Content>
                                     <ListItem.Title>{l.name}</ListItem.Title>
                                     <ListItem.Subtitle>{l.phone}</ListItem.Subtitle>
+                                    <ListItem.Subtitle>{l.email}</ListItem.Subtitle>
                                 </ListItem.Content>
                             </ListItem>
                         </TouchableOpacity>
                     ))
                 }
             </View>
+            {notification && <NotificationLogin message={notification.message} color={notification.color} />}
         </View>
 
 

@@ -21,7 +21,8 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   const login = () =>{
-    setNotification(null)
+   
+   setNotification(null)
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
@@ -30,7 +31,7 @@ const LoginScreen = () => {
         setNotification({ message: 'Login bem sucedido', color: 'green' });
 
 
-        setTimeout(() => navigation.navigate("Contato"), 3000); 
+        setTimeout(() => navigation.navigate("Contato"), 1000); 
         
         // ...
       })

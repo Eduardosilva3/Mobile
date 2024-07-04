@@ -16,11 +16,13 @@ const EditarContato = (props) => {
     let contato = props.route.params
     let nome = props.route.params.name;
     let phoneU = props.route.params.phone;
+    let emailU = props.route.params.email;
 
     const [showNotification, setShowNotification] = useState(false);
     const [name, setName] = useState(nome);
     const [phone, setPhone] = useState(phoneU);
     const [mensagem, setMensagem] = useState("")
+    const [email, setEmail] = useState(emailU)
 
     const alterar = () => {
         
@@ -29,7 +31,8 @@ const EditarContato = (props) => {
             "id": contato.id,
             "name": name,
             "avatar_url": "https://cdn-icons-png.flaticon.com/128/711/711769.png",
-            "phone": phone
+            "phone": phone,
+            "email": email
         }
 
         ApiContato.putContato(contatoAlerado)
@@ -107,6 +110,8 @@ const EditarContato = (props) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Email"
+                        value={email}
+                        onChangeText={setEmail}
 
 
                     />

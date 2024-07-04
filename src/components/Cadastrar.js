@@ -20,6 +20,9 @@ const Cadastro = () => {
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
 
+
+ 
+
   const auth = getAuth(app);
 
   const salvar = () => {

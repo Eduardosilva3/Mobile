@@ -22,7 +22,8 @@ const CadastroContato = ({navigation, route}) => {
         contato = {
             "name": nome,
             "avatar_url": "https://cdn-icons-png.flaticon.com/128/711/711769.png",
-            "phone": telefone
+            "phone": telefone,
+            "email": email
         };
 
         ApiContato.postContato(contato)
@@ -71,6 +72,7 @@ const CadastroContato = ({navigation, route}) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Email"
+                        onChangeText={setEmail}
 
 
                     />
